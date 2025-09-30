@@ -1,3 +1,3 @@
-# voicevox-deploy
-Deployed on: arch (compose-cd)
+# avisspeech-deploy
+Deployed on: mitou (compose-cd)
 
