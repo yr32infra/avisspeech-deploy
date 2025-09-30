@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  avisspeech:
+    image: ghcr.io/aivis-project/aivisspeech-engine:nvidia-latest@sha256:581c9d0881c0642c3b5a0a323ccb138b11ca92d04009d4d90fbf2877ebc29e70
+    hostname: avisspeech
+    container_name: avisspeech__avisspeech
+    restart: unless-stopped
+
+    networks:
+      - default
+
+    volumes:
+      - type: bind
+        source: ./AvisSpeech-Engine
+        target: /home/user/.local/share/AivisSpeech-Engine-Dev
+
+    deploy:
+      resources:
+        limits:
+          memory: 16g
+        reservations:
+          devices:
+            - driver: nvidia
+              # Fix for docker-ce 27.3.x bugs.
+              # refs:
+              #   https://x.com/yanorei32/status/1840455188928405554
+              #   https://github.com/moby/moby/pull/48483
+              #   https://docs.docker.com/compose/how-tos/gpu-support/
+              count: all
+              capabilities: [gpu]
+
+  cloudflared:
+    image: cloudflare/cloudflared:2025.9.1-amd64@sha256:e0d01332894a8adb2d55242f0e6cd28701722dbb7555523abac2f9cf39c22744
+    hostname: cloudflared
+    container_name: avisspeech__cloudflared
+    restart: unless-stopped
+
+    environment:
+      TUNNEL_METRICS: 0.0.0.0:9126
+      TUNNEL_LOGFILE: /dev/stdout
+
+    command: tunnel run --token ${TUNNEL_TOKEN}
+    user: root
+
+    networks:
+      default:
+
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+networks:
+  default:
+    name: avisspeech__default
