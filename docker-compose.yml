@@ -1,9 +1,9 @@
 version: '3.9'
 services:
-  avisspeech:
+  aivisspeech:
     image: ghcr.io/aivis-project/aivisspeech-engine:nvidia-latest@sha256:581c9d0881c0642c3b5a0a323ccb138b11ca92d04009d4d90fbf2877ebc29e70
-    hostname: avisspeech
-    container_name: avisspeech__avisspeech
+    hostname: aivisspeech
+    container_name: aivisspeech__aivisspeech
     restart: unless-stopped
 
     networks:
@@ -11,7 +11,7 @@ services:
 
     volumes:
       - type: bind
-        source: ./AvisSpeech-Engine
+        source: ./AivisSpeech-Engine
         target: /home/user/.local/share/AivisSpeech-Engine-Dev
 
     deploy:
@@ -32,7 +32,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:2025.9.1-amd64@sha256:e0d01332894a8adb2d55242f0e6cd28701722dbb7555523abac2f9cf39c22744
     hostname: cloudflared
-    container_name: avisspeech__cloudflared
+    container_name: aivisspeech__cloudflared
     restart: unless-stopped
 
     environment:
@@ -52,4 +52,4 @@ services:
 
 networks:
   default:
-    name: avisspeech__default
+    name: aivisspeech__default
